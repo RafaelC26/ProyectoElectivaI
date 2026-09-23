@@ -221,6 +221,11 @@ Para que cualquiera abra el dashboard desde su navegador sin instalar nada. El r
 | `uptc-redis` (Key Value) | Redis (Valkey 8, compatible con todos los comandos que usamos) | Free |
 | `uptc-postgres` (PostgreSQL) | Histórico permanente | Free |
 
+Atajo: este botón abre directamente el paso 4 con el repositorio ya elegido (hay que haber iniciado
+sesión en Render):
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/RafaelC26/ProyectoElectivaI)
+
 Pasos (una sola vez):
 
 1. Entrar a <https://dashboard.render.com> e iniciar sesión con la cuenta de GitHub dueña del
