@@ -1,0 +1,18 @@
+{
+  "$comment": "Umbrales de clasificación y alertas. Son decisiones de implementación, no normas institucionales. Las variables WARNING_OCCUPANCY, CRITICAL_OCCUPANCY y LOW_AVAILABILITY del .env tienen prioridad.",
+  "occupancy": {
+    "normal": 60,
+    "warning": 80,
+    "critical": 90,
+    "full": 100
+  },
+  "lowAvailability": 5,
+  "unusualIncreasePercent": 20,
+  "unusualIncreaseWindowSeconds": 6,
+  "trend": {
+    "threshold": 3,
+    "windowSeconds": 30
+  },
+  "alertHysteresis": 2,
+  "alertCooldownSeconds": 30
+}

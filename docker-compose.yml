@@ -1,0 +1,116 @@
+# UPTC Smart Parking — arquitectura orientada a eventos con Redis
+#
+#   docker compose up --build                       → núcleo (redis, publisher, processor, backend, archiver, frontend)
+#   docker compose --profile insight up --build     → + RedisInsight en http://localhost:5540
+#   docker compose --profile local-db up --build    → + PostgreSQL en contenedor (si no hay Postgres local)
+#   (los perfiles también se activan con COMPOSE_PROFILES en .env, p. ej. COMPOSE_PROFILES=local-db,insight)
+name: uptc-smart-parking
+
+x-node-app: &node-app
+  image: uptc-smart-parking/node:latest
+  build:
+    context: .
+    dockerfile: docker/node.Dockerfile
+  init: true
+  restart: unless-stopped
+  env_file:
+    - path: .env
+      required: false
+  environment: &node-env
+    CONFIG_DIR: /app/config
+  volumes:
+    - ./config:/app/config:ro
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+  depends_on:
+    redis:
+      condition: service_healthy
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  publisher:
+    <<: *node-app
+    command: ["node", "--import", "tsx", "apps/publisher/src/index.ts"]
+
+  processor:
+    <<: *node-app
+    command: ["node", "--import", "tsx", "apps/processor/src/index.ts"]
+
+  backend:
+    <<: *node-app
+    command: ["node", "--import", "tsx", "apps/backend/src/index.ts"]
+    environment:
+      <<: *node-env
+      BACKEND_PORT: 3000
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  archiver:
+    <<: *node-app
+    command: ["node", "--import", "tsx", "apps/archiver/src/index.ts"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    image: uptc-smart-parking/frontend:latest
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    profiles: ["insight"]
+    ports:
+      - "5540:5540"
+    environment:
+      RI_REDIS_HOST: redis
+      RI_REDIS_PORT: "6379"
+      RI_REDIS_ALIAS: uptc-smart-parking
+    volumes:
+      - redisinsight-data:/data
+    depends_on:
+      - redis
+
+  postgres:
+    image: postgres:18-alpine
+    profiles: ["local-db"]
+    environment:
+      POSTGRES_USER: proyecto_electiva_1
+      POSTGRES_PASSWORD: Admin
+      POSTGRES_DB: uptc_smart_parking
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U proyecto_electiva_1 -d uptc_smart_parking"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  redis-data:
+  redisinsight-data:
+  pg-data:

@@ -1,0 +1,13 @@
+{
+  "name": "@uptc/processor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Subscriber + Processor: estado actual, histórico, métricas, ranking y alertas",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc -p ."
+  },
+  "dependencies": { "@uptc/shared": "*", "ioredis": "^5.11.1", "tsx": "^4.20.6", "zod": "^4.1.12" }
+}

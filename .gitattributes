@@ -1,0 +1,7 @@
+# Finales de línea LF en todos los sistemas (evita errores de scripts y configs en Windows)
+* text=auto eol=lf
+*.sh text eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary

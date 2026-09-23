@@ -1,0 +1,43 @@
+{
+  "name": "uptc-smart-parking",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema distribuido de monitoreo de estacionamientos en tiempo real con Redis — UPTC Seccional Sogamoso",
+  "type": "module",
+  "workspaces": [
+    "packages/shared",
+    "apps/publisher",
+    "apps/processor",
+    "apps/backend",
+    "apps/archiver",
+    "apps/frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n publisher,processor,backend,archiver,frontend -c blue,magenta,green,yellow,cyan \"npm:dev:publisher\" \"npm:dev:processor\" \"npm:dev:backend\" \"npm:dev:archiver\" \"npm:dev:frontend\"",
+    "dev:publisher": "npm run dev -w @uptc/publisher",
+    "dev:processor": "npm run dev -w @uptc/processor",
+    "dev:backend": "npm run dev -w @uptc/backend",
+    "dev:archiver": "npm run dev -w @uptc/archiver",
+    "dev:frontend": "npm run dev -w @uptc/frontend",
+    "build:frontend": "npm run build -w @uptc/frontend",
+    "typecheck": "tsc -p packages/shared && tsc -p apps/publisher && tsc -p apps/processor && tsc -p apps/backend && tsc -p apps/archiver && tsc -p apps/frontend",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "bash scripts/test-integration.sh",
+    "db:setup": "bash scripts/setup-postgres.sh",
+    "format": "prettier --write \"apps/*/src/**/*.{ts,tsx}\" \"apps/*/test/**/*.ts\" \"packages/*/src/**/*.ts\" \"packages/*/test/**/*.ts\" \"tests/**/*.ts\" \"*.ts\"",
+    "format:check": "prettier --check \"apps/*/src/**/*.{ts,tsx}\" \"apps/*/test/**/*.ts\" \"packages/*/src/**/*.ts\" \"packages/*/test/**/*.ts\" \"tests/**/*.ts\" \"*.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.9.8",
+    "tsx": "^4.20.6",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.9",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

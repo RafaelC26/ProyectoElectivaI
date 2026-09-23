@@ -1,0 +1,27 @@
+{
+  "$comment": "Parámetros del simulador. entryWeight/exitWeight = probabilidad de que un movimiento sea entrada o salida. intensity = movimientos esperados por minuto simulado como fracción de la capacidad de la zona. Son parámetros de simulación, NO datos reales de la universidad.",
+  "accelerated": {
+    "timeScale": 60,
+    "dayStart": "06:00",
+    "dayEnd": "20:00"
+  },
+  "initialOccupancy": { "min": 0.06, "max": 0.14 },
+  "normalCeiling": 0.75,
+  "schedule": [
+    { "from": "06:00", "to": "07:00", "profile": "MEDIUM", "entryWeight": 0.6, "exitWeight": 0.4, "intensity": 0.006 },
+    { "from": "07:00", "to": "08:00", "profile": "HIGH_ENTRY", "entryWeight": 0.8, "exitWeight": 0.2, "intensity": 0.017 },
+    { "from": "08:00", "to": "12:00", "profile": "STABLE", "entryWeight": 0.5, "exitWeight": 0.5, "intensity": 0.005 },
+    { "from": "12:00", "to": "14:00", "profile": "HIGH_EXIT", "entryWeight": 0.25, "exitWeight": 0.75, "intensity": 0.0045 },
+    { "from": "14:00", "to": "17:00", "profile": "MEDIUM", "entryWeight": 0.55, "exitWeight": 0.45, "intensity": 0.02 },
+    { "from": "17:00", "to": "18:00", "profile": "HIGH_EXIT", "entryWeight": 0.15, "exitWeight": 0.85, "intensity": 0.016 },
+    { "from": "18:00", "to": "06:00", "profile": "LOW", "entryWeight": 0.3, "exitWeight": 0.7, "intensity": 0.006 }
+  ],
+  "scenarios": {
+    "HIGH_DEMAND": { "intensityMultiplier": 1.8, "entryBoost": 0.2, "ceiling": 0.97 },
+    "MASS_ENTRY": { "fractionOfCapacity": 0.3, "ticks": 3 },
+    "MASS_EXIT": { "fractionOfCapacity": 0.35, "ticks": 3 },
+    "NEAR_FULL": { "targetMin": 0.9, "targetMax": 0.99, "stepFraction": 0.06 },
+    "FULL": { "stepFraction": 0.08 },
+    "RECOVERY": { "stepFraction": 0.06, "target": 0.7 }
+  }
+}

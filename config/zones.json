@@ -1,0 +1,11 @@
+{
+  "$comment": "Zonas conceptuales de demostración. Nombres y capacidades NO corresponden a los parqueaderos reales de la UPTC; se pueden modificar sin tocar el código. demandFactor (opcional) ajusta la popularidad relativa de la zona en el simulador.",
+  "zones": [
+    { "id": "CARS-A", "name": "Zona A", "vehicleType": "CAR", "capacity": 60, "demandFactor": 1.0 },
+    { "id": "CARS-B", "name": "Zona B", "vehicleType": "CAR", "capacity": 70, "demandFactor": 1.15 },
+    { "id": "CARS-C", "name": "Zona C", "vehicleType": "CAR", "capacity": 50, "demandFactor": 0.9 },
+    { "id": "MOTOS-01", "name": "Zona M1", "vehicleType": "MOTORCYCLE", "capacity": 80, "demandFactor": 1.05 },
+    { "id": "MOTOS-02", "name": "Zona M2", "vehicleType": "MOTORCYCLE", "capacity": 80, "demandFactor": 1.2 },
+    { "id": "MOTOS-03", "name": "Zona M3", "vehicleType": "MOTORCYCLE", "capacity": 80, "demandFactor": 0.85 }
+  ]
+}

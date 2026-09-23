@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens de diseño — paleta de la especificación (fondo #0A0F14, paneles #111820,
+ * texto #F5F7FA / #8C98A4). Series y estados validados con el validador CVD de la
+ * guía de visualización (ver docs/technical-report.md § Dashboard).
+ */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --color-bg: #0a0f14;
+  --color-panel: #111820;
+  --color-panel-2: #16202a;
+  --color-panel-3: #1c2733;
+  --color-line: #1f2a36;
+  --color-line-2: #2a3745;
+  --color-ink: #f5f7fa;
+  --color-ink-2: #8c98a4;
+  --color-ink-3: #5f6b77;
+
+  /* Identidad: carros (azul) y motocicletas (violeta) */
+  --color-car: #3987e5;
+  --color-moto: #c75bc8;
+
+  /* Estados (reservados: siempre con icono + texto) */
+  --color-good: #0ca30c;
+  --color-good-ink: #4cd46b;
+  --color-warn: #fab219;
+  --color-serious: #ec835a;
+  --color-crit: #d03b3b;
+  --color-crit-ink: #ff6b6b;
+
+  /* Series de flujo */
+  --color-in: #199e70;
+  --color-out: #d95926;
+
+  --animate-pulse-once: pulse-once 450ms ease-out;
+  --animate-flash: flash 500ms ease-out;
+  --animate-row-in: row-in 900ms ease-out;
+}
+
+@keyframes row-in {
+  0% { background: color-mix(in srgb, #3987e5 22%, transparent); }
+  100% { background: transparent; }
+}
+
+@keyframes pulse-once {
+  0% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(1.8); opacity: 0.35; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes flash {
+  0% { box-shadow: 0 0 0 1px var(--flash-color, #3987e5), 0 0 18px -4px var(--flash-color, #3987e5); }
+  100% { box-shadow: 0 0 0 1px transparent, 0 0 0 0 transparent; }
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: #3987e555;
+}
+
+/* Barras de desplazamiento discretas */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a3745 transparent;
+}
+
+/* Recharts: sin contorno de foco sobre el SVG */
+.recharts-wrapper *:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
