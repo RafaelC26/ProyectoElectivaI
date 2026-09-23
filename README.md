@@ -408,8 +408,9 @@ aumentando en vivo.
    (`PUBLISH parking-events`).
 4. El **Processor** lo recibe, lee el estado anterior de la zona (`HGETALL parking:zone:MOTOS-02` →
    72/80), actualiza las ventanas de tiempo y calcula: 73 / 80 = **91,25 % → CRITICAL**.
-5. Guarda el nuevo estado (`HSET`), el ranking (`ZADD`) y el punto de la gráfica
-   (`XADD parking:timeseries`), y publica el resultado en `parking-updates`.
+5. Guarda en un solo viaje el nuevo estado (`HSET`), el ranking (`ZADD`), las estadísticas y su
+   checkpoint (`XADD` al Stream sólo si hubo eventos derivados, como `PARKING_FULL`), y publica el
+   resultado en `parking-updates`.
 6. El **Backend** recibe ese mensaje y lo envía al navegador por WebSocket (Socket.IO).
 7. La tarjeta de la Zona M2 pasa a **73/80** sin recargar la página.
 
