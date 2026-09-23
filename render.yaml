@@ -1,0 +1,58 @@
+# Despliegue en Render (plan gratuito). En Render: New → Blueprint → elegir este repositorio.
+#
+# El plan gratuito no ofrece background workers, así que publisher, processor, archiver y backend
+# corren como procesos separados dentro de un único servicio web (scripts/render-start.mjs) y se
+# comunican sólo a través de Redis, igual que en Docker Compose. El backend sirve el dashboard.
+#
+# Limitaciones del plan gratuito: el servicio web se duerme tras 15 min sin visitas (la primera
+# visita tarda ~1 min en despertarlo y la simulación se pausa mientras duerme), el Key Value no
+# persiste en disco y la base de datos gratuita expira a los 30 días.
+services:
+  - type: web
+    name: uptc-smart-parking
+    runtime: docker
+    plan: free
+    region: virginia
+    dockerfilePath: ./docker/render.Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: REDIS_HOST
+        fromService:
+          type: keyvalue
+          name: uptc-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: keyvalue
+          name: uptc-redis
+          property: port
+      - key: DATABASE_URL
+        fromDatabase:
+          name: uptc-postgres
+          property: connectionString
+      - key: SIMULATION_INTERVAL_MS
+        value: "3000"
+      # Protege el panel del simulador en la URL pública: el valor se ve en Render → Environment
+      # y se escribe una vez en /simulator. Borrar la variable deja el panel abierto a todos.
+      - key: DEMO_CONTROL_TOKEN
+        generateValue: true
+      # Con 0,1 CPU, escribir una línea de log por evento en cada servicio cuesta CPU:
+      # sólo se registran advertencias y errores.
+      - key: LOG_LEVEL
+        value: warn
+
+  - type: keyvalue
+    name: uptc-redis
+    plan: free
+    region: virginia
+    maxmemoryPolicy: volatile-lru
+    ipAllowList: [] # sólo accesible desde la red privada de Render
+
+databases:
+  - name: uptc-postgres
+    plan: free
+    region: virginia
+    databaseName: uptc_smart_parking
+    user: proyecto_electiva_1

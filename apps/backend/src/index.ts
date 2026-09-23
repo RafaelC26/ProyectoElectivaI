@@ -1,4 +1,5 @@
 import { createServer } from 'node:http';
+import { join, resolve } from 'node:path';
 import { SERVICES } from '@uptc/shared';
 import {
   createLogger,
@@ -74,6 +75,20 @@ app.use(
     }),
   ),
 );
+
+// Despliegue "todo en uno" (Render): sin nginx, el backend también sirve el dashboard compilado.
+const staticDir = envOptional('STATIC_DIR');
+if (staticDir) {
+  const root = resolve(staticDir);
+  app.use('/assets', express.static(join(root, 'assets'), { immutable: true, maxAge: '1y' }));
+  app.use(express.static(root, { index: false }));
+  // SPA: /simulator, /system y /debug se resuelven en el navegador.
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' || req.path.startsWith('/api/')) return next();
+    res.sendFile(join(root, 'index.html'));
+  });
+}
+
 app.use(notFoundHandler);
 app.use(errorHandler(logger));
 

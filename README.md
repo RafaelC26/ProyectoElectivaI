@@ -29,6 +29,7 @@ Dashboard** en unos 10 milisegundos, y el tablero cambia sin recargar la página
   - [Paso 5: comprobar que todo funciona](#paso-5-comprobar-que-todo-funciona)
   - [Ajustes para el día de la exposición](#ajustes-para-el-día-de-la-exposición)
   - [Comandos del día a día](#comandos-del-día-a-día)
+  - [Publicar en Render (enlace público)](#publicar-en-render-enlace-público)
   - [Modo desarrollo y pruebas](#modo-desarrollo-y-pruebas)
   - [Solución de problemas](#solución-de-problemas)
 - [Parte 2. Guion de exposición: qué es y cómo funciona](#parte-2-guion-de-exposición-qué-es-y-cómo-funciona)
@@ -208,6 +209,52 @@ Si los cinco puntos se cumplen, el sistema está funcionando completo.
 | Borrar todo, **incluidos los datos** de Redis y del PostgreSQL en contenedor | `docker compose down -v` |
 
 `docker compose down -v` no toca un PostgreSQL instalado en el equipo (opción B).
+
+### Publicar en Render (enlace público)
+
+Para que cualquiera abra el dashboard desde su navegador sin instalar nada. El repositorio trae un
+**Blueprint** ([`render.yaml`](render.yaml)) que crea todo en Render con el **plan gratuito**:
+
+| Recurso en Render | Qué contiene | Plan |
+|---|---|---|
+| `uptc-smart-parking` (Web Service) | Publisher, processor, archiver y backend como cuatro procesos, y el dashboard | Free |
+| `uptc-redis` (Key Value) | Redis (Valkey 8, compatible con todos los comandos que usamos) | Free |
+| `uptc-postgres` (PostgreSQL) | Histórico permanente | Free |
+
+Pasos (una sola vez):
+
+1. Entrar a <https://dashboard.render.com> e iniciar sesión con la cuenta de GitHub dueña del
+   repositorio.
+2. **New → Blueprint**.
+3. Presionar **Connect** junto al repositorio **RafaelC26/ProyectoElectivaI** (si no aparece, darle
+   acceso a Render desde GitHub con *Configure account*).
+4. Escribir un nombre para el Blueprint, dejar la rama `main`, revisar los tres recursos que Render
+   leyó de `render.yaml` y presionar **Deploy Blueprint**.
+5. Esperar el primer despliegue (unos 5 a 10 minutos). El enlace público aparece arriba en el
+   servicio `uptc-smart-parking`, del tipo `https://uptc-smart-parking.onrender.com` (si el nombre ya
+   está tomado, Render le agrega un sufijo).
+6. El panel del simulador está protegido con un token para que los visitantes sólo puedan mirar. Para
+   verlo: servicio `uptc-smart-parking` → **Environment** → `DEMO_CONTROL_TOKEN`. La primera orden en
+   `/simulator` lo pide y queda guardado en ese navegador. Si prefieren que cualquiera pueda usar el
+   simulador, borren esa variable.
+
+Después, cada `git push` a `main` vuelve a desplegar automáticamente.
+
+**¿Por qué un solo servicio?** El plan gratuito de Render no incluye *background workers*. Por eso
+publisher, processor y archiver corren como procesos separados dentro del mismo servicio web
+([`scripts/render-start.mjs`](scripts/render-start.mjs)) y se siguen comunicando únicamente a través de
+Redis, igual que en Docker. La imagen ([`docker/render.Dockerfile`](docker/render.Dockerfile))
+precompila cada servicio para que arranque rápido. En el equipo local no cambia nada.
+
+Limitaciones del plan gratuito (medidas con los mismos límites: 0,1 CPU y 512 MB de RAM):
+
+| Limitación | Efecto | Qué hacer |
+|---|---|---|
+| El servicio se duerme tras 15 min sin visitas | La primera visita tarda 1 a 2 minutos en cargar y la simulación se pausa mientras duerme | Abrir el enlace unos minutos antes de mostrarlo |
+| 0,1 CPU | Latencia de ~50 ms (en local ~10 ms); en la hora pico de la mañana puede haber unos segundos de retraso | Para la exposición en vivo, usar la versión local |
+| Key Value sin persistencia en disco | Si Render lo reinicia se pierde el estado; se recalibra con los siguientes eventos | — |
+| La base de datos gratuita expira a los 30 días y sólo se permite una por cuenta | Se pierde el histórico permanente | Crear otra o pasarla a un plan pago |
+| 750 horas gratis al mes por cuenta | Alcanza para un servicio encendido todo el mes | — |
 
 ### Modo desarrollo y pruebas
 
@@ -710,11 +757,11 @@ ProyectoElectivaI/
 ├── packages/shared/ modelo de eventos, esquemas Zod, constantes, dominio, utilidades Node
 ├── config/          zones.json · thresholds.json · simulation.json
 ├── db/schema.sql    esquema de PostgreSQL (lo aplica el archiver)
-├── docker/          Dockerfiles, nginx.conf, redis.conf
+├── docker/          Dockerfiles (local y Render), nginx.conf, redis.conf
 ├── docs/            documentación técnica e imágenes
-├── scripts/         setup-postgres · redis-cli · simulate-day · socket-probe · test-integration
+├── scripts/         setup-postgres · redis-cli · simulate-day · socket-probe · test-integration · render-start
 ├── tests/           pruebas de integración
-├── docker-compose.yml · .env.example · package.json
+├── docker-compose.yml · render.yaml · .env.example · package.json
 └── Documento_Proyecto_UPTC_Smart_Parking.pdf / .docx
 ```
 
