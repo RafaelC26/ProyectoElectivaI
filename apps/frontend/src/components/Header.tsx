@@ -16,7 +16,7 @@ function LiveIndicator() {
   const connection = useParking((s) => s.connection);
   const live = connection === 'LIVE';
   const label = live ? 'LIVE' : connection === 'CONNECTING' ? 'CONECTANDO' : 'RECONNECTING';
-  const color = live ? 'var(--color-good-ink)' : 'var(--color-warn)';
+  const color = live ? 'var(--color-good-ink)' : 'var(--color-warn-ink)';
   return (
     <span
       className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold tracking-[0.12em]"
@@ -58,7 +58,7 @@ function RedisPill() {
   const connected = connection === 'LIVE' && status?.redis.connected !== false;
   return (
     <span className="inline-flex items-center gap-1.5 text-xs text-ink-2">
-      <Database size={13} aria-hidden className={connected ? 'text-good-ink' : 'text-warn'} />
+      <Database size={13} aria-hidden className={connected ? 'text-good-ink' : 'text-warn-ink'} />
       <span>{connected ? 'Redis Connected' : 'Redis reconectando'}</span>
     </span>
   );
@@ -75,7 +75,7 @@ function SimClock() {
       <span>
         Hora simulada <b className="font-mono text-ink tabular">{sim.simulated_time}</b> · {profile}
         {sim.global_scenario !== 'NORMAL' && ` · ${scenario}`}
-        {sim.status === 'PAUSED' && <b className="ml-1 text-warn">· PAUSA</b>}
+        {sim.status === 'PAUSED' && <b className="ml-1 text-warn-ink">· PAUSA</b>}
       </span>
     </span>
   );

@@ -61,7 +61,7 @@ export function SimulatorPage() {
           <div className="flex flex-wrap items-center gap-3">
             <span
               className="inline-flex items-center gap-2 rounded-full border border-line-2 px-3 py-1 text-sm font-semibold"
-              style={{ color: running ? 'var(--color-good-ink)' : 'var(--color-warn)' }}
+              style={{ color: running ? 'var(--color-good-ink)' : 'var(--color-warn-ink)' }}
             >
               <span className="size-2 rounded-full" style={{ background: 'currentColor' }} />
               {sim ? (running ? 'Running' : 'Paused') : 'Sin conexión con el Publisher'}

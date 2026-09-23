@@ -387,10 +387,11 @@ lectura, suscriptores) y archivo en PostgreSQL. Opcionalmente protege las órden
 - **Recorrido de un evento:** contadores en vivo de cada etapa de la arquitectura.
 - Páginas `/simulator`, `/system` y `/debug`.
 
-Paleta de la especificación (fondo `#0A0F14`, paneles `#111820`, texto `#F5F7FA`/`#8C98A4`);
-carros en azul y motocicletas en violeta. Los colores de series se verificaron con un validador de
-daltonismo; como el par azul–violeta queda en la banda de advertencia, todas las series llevan
-etiqueta directa, leyenda e icono, y los estados nunca dependen sólo del color.
+Tema claro: fondo y paneles blancos, texto en negro (`#0B1220`) y azul (`#1E3A8A` / `#3F5A99`);
+carros en azul (`#2563EB`) y motocicletas en fucsia (`#A21CAF`). Cada estado tiene un color para
+marcas y otro más oscuro para texto, con contraste de al menos 4,5:1 sobre blanco. Los colores de
+series se verificaron con un validador de daltonismo sobre fondo blanco; además todas las series
+llevan etiqueta directa, leyenda e icono, y los estados nunca dependen sólo del color.
 
 ## 30. Docker
 

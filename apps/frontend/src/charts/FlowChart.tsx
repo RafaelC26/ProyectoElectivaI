@@ -18,8 +18,8 @@ const HEIGHT = 240;
 type Scope = 'ALL' | 'CAR' | 'MOTORCYCLE';
 
 const SERIES: SeriesDef[] = [
-  { key: 'entries', label: 'Entradas', color: '#199e70' },
-  { key: 'exits', label: 'Salidas', color: '#d95926' },
+  { key: 'entries', label: 'Entradas', color: '#047857' },
+  { key: 'exits', label: 'Salidas', color: '#c2410c' },
 ];
 
 /**

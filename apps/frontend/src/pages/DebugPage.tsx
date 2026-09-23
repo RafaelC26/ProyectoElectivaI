@@ -7,10 +7,10 @@ import { api, type InspectResult } from '../services/api';
 import { useParking } from '../stores/parking-store';
 
 const TYPE_COLOR: Record<string, string> = {
-  hash: '#3987e5',
-  stream: '#199e70',
-  zset: '#c98500',
-  string: '#8c98a4',
+  hash: '#2563eb',
+  stream: '#047857',
+  zset: '#b45309',
+  string: '#3f5a99',
 };
 
 const QUICK = [
@@ -89,7 +89,7 @@ function KeyBrowser({ onInspect, selected }: { onInspect: (key: string) => void;
                   {k.type}
                 </td>
                 <td className="px-2 py-1.5 text-right text-ink-2 tabular">{fmtInt(k.size)}</td>
-                <td className={cx('px-4 py-1.5 text-right tabular', k.ttl >= 0 ? 'text-warn' : 'text-ink-3')}>
+                <td className={cx('px-4 py-1.5 text-right tabular', k.ttl >= 0 ? 'text-warn-ink' : 'text-ink-3')}>
                   {k.ttl >= 0 ? `${k.ttl} s` : '∞'}
                 </td>
               </tr>
@@ -163,7 +163,7 @@ function PostgresPanel() {
       subtitle="Tablas alimentadas por el archiver (XREADGROUP → INSERT → XACK)"
     >
       {unavailable ? (
-        <p className="text-sm text-warn">No disponible: {unavailable}</p>
+        <p className="text-sm text-warn-ink">No disponible: {unavailable}</p>
       ) : (
         <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
           <dl className="divide-y divide-line">
@@ -220,7 +220,7 @@ function PostgresPanel() {
                     <span className="text-ink">{a.id}</span>
                     <span>{a.zone_id}</span>
                     <span className="truncate">{a.type}</span>
-                    <span className={a.status === 'ACTIVE' ? 'text-warn' : 'text-good-ink'}>
+                    <span className={a.status === 'ACTIVE' ? 'text-warn-ink' : 'text-good-ink'}>
                       {a.status === 'ACTIVE' ? 'ACTIVA' : `${a.resolution} · ${a.duration_s}s`}
                     </span>
                   </li>
@@ -249,7 +249,7 @@ export function DebugPage() {
             <KeyValue
               label="Estado"
               value={
-                <b style={{ color: status?.redis.connected ? 'var(--color-good-ink)' : 'var(--color-warn)' }}>
+                <b style={{ color: status?.redis.connected ? 'var(--color-good-ink)' : 'var(--color-warn-ink)' }}>
                   {status?.redis.connected ? 'Connected' : 'Reconnecting'}
                 </b>
               }

@@ -30,14 +30,14 @@ import {
 export const STATUS_META: Record<ZoneStatus, { label: string; color: string; ink: string; icon: LucideIcon }> = {
   LOW: { label: 'Baja', color: 'var(--color-good)', ink: 'var(--color-good-ink)', icon: CircleCheck },
   NORMAL: { label: 'Normal', color: 'var(--color-good)', ink: 'var(--color-good-ink)', icon: CircleCheck },
-  WARNING: { label: 'Advertencia', color: 'var(--color-warn)', ink: 'var(--color-warn)', icon: TriangleAlert },
-  CRITICAL: { label: 'Crítica', color: 'var(--color-serious)', ink: 'var(--color-serious)', icon: Siren },
+  WARNING: { label: 'Advertencia', color: 'var(--color-warn)', ink: 'var(--color-warn-ink)', icon: TriangleAlert },
+  CRITICAL: { label: 'Crítica', color: 'var(--color-serious)', ink: 'var(--color-serious-ink)', icon: Siren },
   FULL: { label: 'Llena', color: 'var(--color-crit)', ink: 'var(--color-crit-ink)', icon: Ban },
 };
 
 export const SEVERITY_META: Record<AlertSeverity, { label: string; color: string; icon: LucideIcon; rank: number }> = {
   CRITICAL: { label: 'CRITICAL', color: 'var(--color-crit-ink)', icon: OctagonAlert, rank: 2 },
-  WARNING: { label: 'WARNING', color: 'var(--color-warn)', icon: TriangleAlert, rank: 1 },
+  WARNING: { label: 'WARNING', color: 'var(--color-warn-ink)', icon: TriangleAlert, rank: 1 },
   INFO: { label: 'INFO', color: 'var(--color-ink-2)', icon: Info, rank: 0 },
 };
 
@@ -55,27 +55,27 @@ export const VEHICLE_META: Record<VehicleType, { label: string; short: string; c
 export const SERVICE_STATE_META: Record<ServiceState, { label: string; color: string }> = {
   ONLINE: { label: 'ONLINE', color: 'var(--color-good-ink)' },
   OFFLINE: { label: 'OFFLINE', color: 'var(--color-crit-ink)' },
-  RECONNECTING: { label: 'RECONNECTING', color: 'var(--color-warn)' },
-  PAUSED: { label: 'PAUSADO', color: 'var(--color-warn)' },
-  DEGRADED: { label: 'DEGRADADO', color: 'var(--color-serious)' },
+  RECONNECTING: { label: 'RECONNECTING', color: 'var(--color-warn-ink)' },
+  PAUSED: { label: 'PAUSADO', color: 'var(--color-warn-ink)' },
+  DEGRADED: { label: 'DEGRADADO', color: 'var(--color-serious-ink)' },
 };
 
-/** Color fijo por zona (sigue a la entidad, nunca a su posición). Validado CVD por grupo. */
+/** Color fijo por zona (sigue a la entidad, nunca a su posición). Validado CVD sobre blanco. */
 export const ZONE_COLORS: Record<string, string> = {
-  'CARS-A': '#3987e5',
-  'CARS-B': '#199e70',
-  'CARS-C': '#c98500',
-  'MOTOS-01': '#c75bc8',
-  'MOTOS-02': '#d95926',
-  'MOTOS-03': '#2ea39a',
+  'CARS-A': '#2563eb',
+  'CARS-B': '#059669',
+  'CARS-C': '#b7791f',
+  'MOTOS-01': '#a21caf',
+  'MOTOS-02': '#dc4c14',
+  'MOTOS-03': '#0d9488',
 };
-const FALLBACK_COLORS = ['#3987e5', '#199e70', '#c98500', '#c75bc8', '#d95926', '#2ea39a'];
+const FALLBACK_COLORS = ['#2563eb', '#059669', '#b7791f', '#a21caf', '#dc4c14', '#0d9488'];
 
 export function zoneColor(zoneId: string, index = 0): string {
   return ZONE_COLORS[zoneId] ?? FALLBACK_COLORS[index % FALLBACK_COLORS.length];
 }
 
-export const GROUP_COLORS = { global: '#dfe5ec', cars: '#3987e5', motorcycles: '#c75bc8' } as const;
+export const GROUP_COLORS = { global: '#0b1220', cars: '#2563eb', motorcycles: '#a21caf' } as const;
 
 export const ALERT_TYPE_LABEL: Record<AlertType, string> = {
   OCCUPANCY_WARNING: 'Ocupación en advertencia',
@@ -103,9 +103,9 @@ export function eventVisual(
     case 'PARKING_FULL':
       return { icon: Ban, color: 'var(--color-crit-ink)', category: 'state' };
     case 'OCCUPANCY_CRITICAL':
-      return { icon: Siren, color: 'var(--color-serious)', category: 'state' };
+      return { icon: Siren, color: 'var(--color-serious-ink)', category: 'state' };
     case 'OCCUPANCY_WARNING':
-      return { icon: TriangleAlert, color: 'var(--color-warn)', category: 'state' };
+      return { icon: TriangleAlert, color: 'var(--color-warn-ink)', category: 'state' };
     case 'PARKING_AVAILABLE':
     case 'ZONE_RECOVERED':
       return { icon: CircleCheck, color: 'var(--color-good-ink)', category: 'state' };

@@ -65,7 +65,7 @@ export function SystemPage() {
         Cada servicio escribe <code className="font-mono text-ink">parking:heartbeat:&lt;servicio&gt;</code> con{' '}
         <code className="font-mono text-ink">EX 10</code>. Si un proceso se detiene la clave expira y aparece{' '}
         <b className="text-crit-ink">OFFLINE</b>; si Redis se cae los servicios muestran{' '}
-        <b className="text-warn">RECONNECTING</b> mientras reintentan (1 s → 2 s → 5 s).
+        <b className="text-warn-ink">RECONNECTING</b> mientras reintentan (1 s → 2 s → 5 s).
       </p>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {status.services.map((s) => (
@@ -79,7 +79,7 @@ export function SystemPage() {
             <KeyValue
               label="WebSocket"
               value={
-                <b style={{ color: connection === 'LIVE' ? 'var(--color-good-ink)' : 'var(--color-warn)' }}>
+                <b style={{ color: connection === 'LIVE' ? 'var(--color-good-ink)' : 'var(--color-warn-ink)' }}>
                   {connection}
                 </b>
               }

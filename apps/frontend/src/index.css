@@ -1,39 +1,42 @@
 @import 'tailwindcss';
 
 /*
- * Tokens de diseño — paleta de la especificación (fondo #0A0F14, paneles #111820,
- * texto #F5F7FA / #8C98A4). Series y estados validados con el validador CVD de la
- * guía de visualización (ver docs/technical-report.md § Dashboard).
+ * Tokens de diseño — tema claro: fondo blanco, texto negro (#0B1220) y azul (#1E3A8A / #3F5A99).
+ * Cada estado tiene un color para marcas (barras, líneas) y otro "-ink" para texto, con
+ * contraste ≥ 4,5:1 sobre blanco. Series validadas con el validador CVD de la guía de
+ * visualización (ver docs/technical-report.md § Dashboard).
  */
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --color-bg: #0a0f14;
-  --color-panel: #111820;
-  --color-panel-2: #16202a;
-  --color-panel-3: #1c2733;
-  --color-line: #1f2a36;
-  --color-line-2: #2a3745;
-  --color-ink: #f5f7fa;
-  --color-ink-2: #8c98a4;
-  --color-ink-3: #5f6b77;
+  --color-bg: #ffffff;
+  --color-panel: #ffffff;
+  --color-panel-2: #f4f7fc;
+  --color-panel-3: #e9eff9;
+  --color-line: #e1e7f0;
+  --color-line-2: #c9d3e3;
+  --color-ink: #0b1220;
+  --color-ink-2: #1e3a8a;
+  --color-ink-3: #3f5a99;
 
-  /* Identidad: carros (azul) y motocicletas (violeta) */
-  --color-car: #3987e5;
-  --color-moto: #c75bc8;
+  /* Identidad: carros (azul) y motocicletas (fucsia) */
+  --color-car: #2563eb;
+  --color-moto: #a21caf;
 
   /* Estados (reservados: siempre con icono + texto) */
-  --color-good: #0ca30c;
-  --color-good-ink: #4cd46b;
-  --color-warn: #fab219;
-  --color-serious: #ec835a;
-  --color-crit: #d03b3b;
-  --color-crit-ink: #ff6b6b;
+  --color-good: #16a34a;
+  --color-good-ink: #15803d;
+  --color-warn: #d97706;
+  --color-warn-ink: #b45309;
+  --color-serious: #ea580c;
+  --color-serious-ink: #9a3412;
+  --color-crit: #dc2626;
+  --color-crit-ink: #b91c1c;
 
   /* Series de flujo */
-  --color-in: #199e70;
-  --color-out: #d95926;
+  --color-in: #047857;
+  --color-out: #c2410c;
 
   --animate-pulse-once: pulse-once 450ms ease-out;
   --animate-flash: flash 500ms ease-out;
@@ -41,7 +44,7 @@
 }
 
 @keyframes row-in {
-  0% { background: color-mix(in srgb, #3987e5 22%, transparent); }
+  0% { background: color-mix(in srgb, #2563eb 16%, transparent); }
   100% { background: transparent; }
 }
 
@@ -52,7 +55,7 @@
 }
 
 @keyframes flash {
-  0% { box-shadow: 0 0 0 1px var(--flash-color, #3987e5), 0 0 18px -4px var(--flash-color, #3987e5); }
+  0% { box-shadow: 0 0 0 1px var(--flash-color, #2563eb), 0 0 18px -4px var(--flash-color, #2563eb); }
   100% { box-shadow: 0 0 0 1px transparent, 0 0 0 0 transparent; }
 }
 
@@ -76,13 +79,13 @@ body {
 }
 
 ::selection {
-  background: #3987e555;
+  background: #2563eb33;
 }
 
 /* Barras de desplazamiento discretas */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2a3745 transparent;
+  scrollbar-color: #c9d3e3 transparent;
 }
 
 /* Recharts: sin contorno de foco sobre el SVG */
